@@ -6,9 +6,10 @@
  *
  *  http://www.apache.org/licenses/LICENSE-2.0
  */
-package hu.webhejj.commons.io.table;
+package hu.webhejj.commons.io.table.csv;
 
 import hu.webhejj.commons.CompareUtils;
+import hu.webhejj.commons.io.table.TableAppender;
 
 import java.io.IOException;
 import java.io.Writer;
