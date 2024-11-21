@@ -18,6 +18,9 @@ version = "0.1.0"
 description = "Webhejj Tables Java utility library"
 
 java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
     withSourcesJar()
 }
 

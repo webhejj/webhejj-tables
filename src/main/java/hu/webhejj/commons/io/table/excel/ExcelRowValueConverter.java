@@ -43,10 +43,10 @@ public class ExcelRowValueConverter {
 
 		switch(cellValue.getCellType()) {
 
-			case CellType.BLANK:
+			case BLANK:
 				return null;
 
-			case CellType.BOOLEAN:
+			case BOOLEAN:
 				if (String.class.isAssignableFrom(valueType)) {
 					return (T) Boolean.toString(cellValue.getBooleanValue());
 
@@ -60,7 +60,7 @@ public class ExcelRowValueConverter {
 					throw new ClassCastException("Can't convert " + cellValue.getBooleanValue() + " to " + valueType.getName());
 				}
 
-			case CellType.STRING:
+			case STRING:
 				String stringValue = cellValue.getStringValue();
 				if (CompareUtils.isEmpty(stringValue)) {
 					return null;
@@ -91,7 +91,7 @@ public class ExcelRowValueConverter {
 					throw new ClassCastException("Can't convert " + stringValue + " to " + valueType.getName());
 				}
 
-			case CellType.NUMERIC:
+			case NUMERIC:
 				if (String.class.isAssignableFrom(valueType)) {
 					Format format = formatter.createFormat(cell);
 					if (format == null) {
@@ -111,7 +111,7 @@ public class ExcelRowValueConverter {
 					throw new ClassCastException("Can't convert " + cellValue.getNumberValue() + " to " + valueType.getName());
 				}
 
-			case CellType.ERROR:
+			case ERROR:
 				FormulaError error = FormulaError.forInt(cell.getErrorCellValue());
 				if (FormulaError.NA.equals(error)) {
 					return null;
@@ -129,17 +129,17 @@ public class ExcelRowValueConverter {
 			return false;
 		}
 		switch (cell.getCellType()) {
-			case CellType.BLANK:
+			case BLANK:
 				return false;
-			case CellType.BOOLEAN:
+			case BOOLEAN:
 				return false;
-			case CellType.ERROR:
+			case ERROR:
 				return false;
-			case CellType.FORMULA:
+			case FORMULA:
 				return false; // TODO...
-			case CellType.NUMERIC:
+			case NUMERIC:
 				return true;
-			case CellType.STRING:
+			case STRING:
 				return false; // TODO...
 		}
 		return false;
@@ -153,10 +153,10 @@ public class ExcelRowValueConverter {
 		} catch (RuntimeException e) {
 			if (cell.getCellType() == CellType.FORMULA) {
 				switch (cell.getCachedFormulaResultType()) {
-					case CellType.NUMERIC:
+					case NUMERIC:
 						cellValue = new CellValue(cell.getNumericCellValue());
 						break;
-					case CellType.STRING:
+					case STRING:
 						cellValue = new CellValue(cell.getStringCellValue());
 						break;
 					default:
