@@ -8,7 +8,7 @@
  */
 package hu.webhejj.commons.io.table.excel;
 
-import hu.webhejj.commons.CompareUtils;
+import hu.webhejj.commons.io.table.CompareUtils;
 
 import java.math.BigDecimal;
 import java.text.Format;

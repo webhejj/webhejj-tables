@@ -1,19 +1,20 @@
 /*
  *  Copyright Gergely Nagy <greg@webhejj.hu>
  *
- *  Licensed under the Apache License, Version 2.0; 
+ *  Licensed under the Apache License, Version 2.0;
  *  you may obtain a copy of the License at:
  *
  *  http://www.apache.org/licenses/LICENSE-2.0
  */
 package hu.webhejj.commons.io.table;
 
-import hu.webhejj.commons.CompareUtils;
+import hu.webhejj.commons.io.table.CompareUtils;
 import hu.webhejj.commons.io.table.TableReader.Row;
 
 import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class AbstractTableRow implements TableReader.Row {
 
@@ -26,13 +27,13 @@ public abstract class AbstractTableRow implements TableReader.Row {
 		T value = getValue(column, valueType);
 		return CompareUtils.isEmpty(value) ? defaultValue : value;
 	}
-	
+
 	@Override
 	public <T> T getValue(int column, Class<T> valueType, T defaultValue) {
 		T value = getValue(column, valueType);
 		return CompareUtils.isEmpty(value) ? defaultValue : value;
 	}
-	
+
 	@Override
 	public List<String> getStringValues() {
 		return new AbstractList<String>() {
@@ -48,12 +49,12 @@ public abstract class AbstractTableRow implements TableReader.Row {
 			}
 		};
 	}
-	
+
 	@Override
 	public Iterator<String> iterator() {
 		return getStringValues().iterator();
 	}
-	
+
 	@Override
 	public int hashCode() {
 	    int hashCode = 1;
@@ -79,7 +80,7 @@ public abstract class AbstractTableRow implements TableReader.Row {
 		Row other = (Row) obj;
 	    int columnCount = Math.max(size() - 1, other.size() - 1);
 	    for (int i = 0; i < columnCount; i++) {
-	    	if(!CompareUtils.isEqual(getValue(i, String.class), other.getValue(i, String.class))) {
+	    	if(!Objects.equals(getValue(i, String.class), other.getValue(i, String.class))) {
 	    		return false;
 	    	}
 	    }

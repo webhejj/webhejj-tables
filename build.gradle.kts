@@ -31,7 +31,6 @@ repositories {
 dependencies {
     implementation("com.opencsv:opencsv:5.9")
     implementation("org.apache.poi:poi-ooxml:5.3.0")
-    implementation("hu.webhejj:webhejj-commons:2.0.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.3")
