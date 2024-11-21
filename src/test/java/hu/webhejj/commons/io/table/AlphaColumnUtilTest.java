@@ -1,22 +1,15 @@
-/*
- *  Copyright Gergely Nagy <greg@webhejj.hu>
- *
- *  Licensed under the Apache License, Version 2.0;
- *  you may obtain a copy of the License at:
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- */
 package hu.webhejj.commons.io.table;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
 public class AlphaColumnUtilTest {
 
-	@Test(expected=IndexOutOfBoundsException.class)
+	@Test
 	public void testToAlphaNegative() {
-		AlphaColumnUtil.toAlpha(-1);
+		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+			AlphaColumnUtil.toAlpha(-1);
+		});
 	}
 
 	@Test
@@ -30,13 +23,12 @@ public class AlphaColumnUtilTest {
 
 	@Test
 	public void testRoundTrip() {
-		for(int i = 0; i < 60; i++) {
-			// System.out.format("%s, %s, %s\n", i, AlphaColumnUtil.toAlpha(i), AlphaColumnUtil.toNumeric(AlphaColumnUtil.toAlpha(i)));
-			Assert.assertEquals(i, AlphaColumnUtil.toNumeric(AlphaColumnUtil.toAlpha(i)));
+		for (int i = 0; i < 60; i++) {
+			Assertions.assertEquals(i, AlphaColumnUtil.toNumeric(AlphaColumnUtil.toAlpha(i)));
 		}
 	}
-	
+
 	protected void testToAlpha(String expected, int actual) {
-		Assert.assertEquals(expected, AlphaColumnUtil.toAlpha(actual));
+		Assertions.assertEquals(expected, AlphaColumnUtil.toAlpha(actual));
 	}
 }

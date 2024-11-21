@@ -8,11 +8,12 @@
  */
 package hu.webhejj.commons.io.table.list;
 
-import hu.webhejj.commons.CompareUtils;
+import hu.webhejj.commons.io.table.CompareUtils;
 import hu.webhejj.commons.io.table.TableReader;
 
 import java.lang.Override;import java.lang.String;import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class SheetListTableReader implements TableReader {
 
@@ -37,7 +38,7 @@ public class SheetListTableReader implements TableReader {
     @Override
     public Sheet getSheet(String name) {
         for(Sheet sheet: sheets) {
-            if(CompareUtils.isEqual(name, sheet.getName())) {
+            if(Objects.equals(name, sheet.getName())) {
                 return sheet;
             }
         }

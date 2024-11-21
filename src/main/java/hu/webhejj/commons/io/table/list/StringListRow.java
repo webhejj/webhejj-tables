@@ -8,7 +8,7 @@
  */
 package hu.webhejj.commons.io.table.list;
 
-import hu.webhejj.commons.CompareUtils;
+import hu.webhejj.commons.io.table.CompareUtils;
 import hu.webhejj.commons.io.table.AbstractTableRow;
 
 import java.lang.Boolean;import java.lang.Class;import java.lang.ClassCastException;import java.lang.Enum;import java.lang.Integer;import java.lang.Long;import java.lang.Override;import java.lang.String;import java.math.BigDecimal;
