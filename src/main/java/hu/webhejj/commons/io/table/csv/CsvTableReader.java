@@ -9,7 +9,10 @@
 
 package hu.webhejj.commons.io.table.csv;
 
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvException;
 import hu.webhejj.commons.io.table.list.RowListSheet;
 import hu.webhejj.commons.io.table.list.SheetListTableReader;
 import hu.webhejj.commons.io.table.list.StringListRow;
@@ -26,17 +29,26 @@ public class CsvTableReader extends SheetListTableReader {
     }
 
     private static Sheet openCsv(String name, Reader reader, char separator, char quote) {
-        CSVReader csvReader = new CSVReader(reader, separator, quote);
-        try {
+        try (CSVReader csvReader = csvReader(reader, separator, quote)) {
             List<String[]> csvRows = csvReader.readAll();
             List<Row> rows = new ArrayList<>(csvRows.size());
-            for(String[] csvRow: csvRows) {
+            for (String[] csvRow : csvRows) {
                 rows.add(new StringListRow(csvRow));
             }
             return new RowListSheet(0, name, rows);
 
-        } catch (IOException e) {
+        } catch (IOException | CsvException e) {
             throw new RuntimeException("Error while reading " + name, e);
         }
+    }
+
+    private static CSVReader csvReader(Reader reader, char separator, char quote) {
+        return new CSVReaderBuilder(reader)
+                .withCSVParser(
+                        new CSVParserBuilder()
+                                .withSeparator(separator)
+                                .withQuoteChar(quote).build()
+                )
+                .build();
     }
 }
