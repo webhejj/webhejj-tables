@@ -8,12 +8,19 @@
  */
 package hu.webhejj.commons.io.table.excel;
 
-import hu.webhejj.commons.io.table.CompareUtils;
+import hu.webhejj.commons.io.table.TableUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FormulaError;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 
 import java.math.BigDecimal;
 import java.text.Format;
-
-import org.apache.poi.ss.usermodel.*;
 
 public class ExcelRowValueConverter {
 
@@ -41,8 +48,9 @@ public class ExcelRowValueConverter {
 			return null;
 		}
 
-		switch(cellValue.getCellType()) {
+		CellType cellType = cell.getCellType().equals(CellType.FORMULA) ? cell.getCachedFormulaResultType() : cell.getCellType();
 
+		switch (cellType) {
 			case BLANK:
 				return null;
 
@@ -62,7 +70,7 @@ public class ExcelRowValueConverter {
 
 			case STRING:
 				String stringValue = cellValue.getStringValue();
-				if (CompareUtils.isEmpty(stringValue)) {
+				if (TableUtils.isEmpty(stringValue)) {
 					return null;
 				}
 				if ("null".equals(stringValue)) {
@@ -81,11 +89,10 @@ public class ExcelRowValueConverter {
 					return (T) Enum.valueOf((Class<? extends Enum>) valueType, stringValue);
 
 				} else if (BigDecimal.class.isAssignableFrom(valueType)) {
-					return (T) (CompareUtils.isEmpty(stringValue) ? null : new BigDecimal(stringValue));
+					return (T) (TableUtils.isEmpty(stringValue) ? null : new BigDecimal(stringValue));
 
 				} else if (Boolean.class.isAssignableFrom(valueType)) {
-				return (T) Boolean.valueOf("true".equalsIgnoreCase(stringValue)
-						|| (!CompareUtils.isEmpty(stringValue) && !"0".equals(stringValue)));
+				return (T) Boolean.valueOf("true".equalsIgnoreCase(stringValue) || (!TableUtils.isEmpty(stringValue) && !"0".equals(stringValue)));
 
 				} else {
 					throw new ClassCastException("Can't convert " + stringValue + " to " + valueType.getName());
@@ -93,6 +100,12 @@ public class ExcelRowValueConverter {
 
 			case NUMERIC:
 				if (String.class.isAssignableFrom(valueType)) {
+
+					// TODO: time zones?
+                    if(DateUtil.isCellDateFormatted(cell)) {
+                        return (T) cell.getDateCellValue().toInstant().toString();
+                    }
+
 					Format format = formatter.createFormat(cell);
 					if (format == null) {
 						// TODO: do this without creating a BigDecimal each time
@@ -115,10 +128,13 @@ public class ExcelRowValueConverter {
 				FormulaError error = FormulaError.forInt(cell.getErrorCellValue());
 				if (FormulaError.NA.equals(error)) {
 					return null;
+                } else {
+                    if (String.class.isAssignableFrom(valueType)) {
+                        return (T) error.getString();
 					} else {
 						// System.err.format("  Cell[%d,%d] error code %s\n", r.getRowNum(), column, error);
-				 return null;
-				 // throw new RuntimeException(String.format("Cell[%d,%d] error code %s", r.getRowNum(), column, error));
+                        throw new RuntimeException(String.format("Cell[%d,%d] error code %s", row.getRowNum(), column, error));
+                    }
 				}
 		}
 		throw new IllegalArgumentException("Don't know how to convert cell of type " + cellValue.getCellType());
@@ -158,6 +174,14 @@ public class ExcelRowValueConverter {
 						break;
 					case STRING:
 						cellValue = new CellValue(cell.getStringCellValue());
+                        break;
+                    case ERROR:
+                        if(cell instanceof XSSFCell) {
+                            cellValue = new CellValue(((XSSFCell) cell).getErrorCellString());
+                        } else {
+                            cellValue = new CellValue(cell.getErrorCellValue());
+                        }
+                        // System.err.format("  Cell[%d,%d] has error: %s\n", row.getRowNum(), column, cellValue.formatAsString());
 						break;
 					default:
 						System.err.format("  Cell[%d,%d] unknown cached formula type %s\n", row.getRowNum(), column, cell.getCachedFormulaResultType());

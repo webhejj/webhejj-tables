@@ -27,6 +27,9 @@ public class ExcelUtils {
 	}
 
 	public static Workbook openWorkbook(File file) {
+		if(!file.exists()) {
+			throw new IllegalArgumentException("File does not exist: " + file);
+		}
 		try {
 			return openWorkbook(new FileInputStream(file));
 		} catch (IOException e) {

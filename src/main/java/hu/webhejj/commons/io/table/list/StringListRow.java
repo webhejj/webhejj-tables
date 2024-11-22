@@ -8,7 +8,7 @@
  */
 package hu.webhejj.commons.io.table.list;
 
-import hu.webhejj.commons.io.table.CompareUtils;
+import hu.webhejj.commons.io.table.TableUtils;
 import hu.webhejj.commons.io.table.AbstractTableRow;
 
 import java.lang.Boolean;import java.lang.Class;import java.lang.ClassCastException;import java.lang.Enum;import java.lang.Integer;import java.lang.Long;import java.lang.Override;import java.lang.String;import java.math.BigDecimal;
@@ -50,11 +50,11 @@ public class StringListRow extends AbstractTableRow {
             return (T) Enum.valueOf((Class<? extends Enum>) valueType, stringValue);
 
         } else if(BigDecimal.class.isAssignableFrom(valueType)) {
-            return (T) (CompareUtils.isEmpty(stringValue) ? null : new BigDecimal(stringValue));
+            return (T) (TableUtils.isEmpty(stringValue) ? null : new BigDecimal(stringValue));
 
         } else if(Boolean.class.isAssignableFrom(valueType)) {
             return (T) Boolean.valueOf("true".equalsIgnoreCase(stringValue)
-                    || (!CompareUtils.isEmpty(stringValue) && !"0".equals(stringValue)));
+                    || (!TableUtils.isEmpty(stringValue) && !"0".equals(stringValue)));
 
         } else {
             throw new ClassCastException("Can't convert " + stringValue + " to " + valueType.getName());
