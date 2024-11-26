@@ -12,6 +12,10 @@ import hu.webhejj.commons.io.table.TableAppender;
 
 import org.apache.poi.ss.usermodel.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 /**
  *
  * TableAppender for Excel format
@@ -23,10 +27,17 @@ public class ExcelTableAppender implements TableAppender {
 
 	private int rowIndex;
 	private int columnIndex;
+	private File excelFile;
 	private final Sheet sheet;
-	private CellStyle textCellStyle;
+	private final CellStyle textCellStyle;
+
+	public ExcelTableAppender(File excelFile) {
+		this(ExcelUtils.ensureSheet(ExcelUtils.openOrCreateWorkbook(excelFile), 0));
+		this.excelFile = excelFile;
+	}
 
 	public ExcelTableAppender(Sheet sheet) {
+		this.excelFile = null;
 		this.sheet = sheet;
 		rowIndex = 0; // sheet.getPhysicalNumberOfRows();
 		columnIndex = 0;
@@ -58,5 +69,15 @@ public class ExcelTableAppender implements TableAppender {
 	public void newRow() {
 		rowIndex++;
 		columnIndex = 0;
+	}
+
+	@Override
+	public void close() throws IOException {
+		if(excelFile != null) {
+			try (FileOutputStream fos = new FileOutputStream(excelFile)) {
+				sheet.getWorkbook().write(fos);
+			}
+		}
+		sheet.getWorkbook().close();
 	}
 }
