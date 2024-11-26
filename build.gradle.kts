@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "hu.webhejj"
-version = "0.1.0"
+version = "0.1.0-SNAPSHOT"
 description = "Webhejj Tables Java utility library"
 
 java {
