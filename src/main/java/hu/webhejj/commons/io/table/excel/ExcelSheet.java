@@ -1,7 +1,7 @@
 /*
  *  Copyright Gergely Nagy <greg@webhejj.hu>
  *
- *  Licensed under the Apache License, Version 2.0; 
+ *  Licensed under the Apache License, Version 2.0;
  *  you may obtain a copy of the License at:
  *
  *  http://www.apache.org/licenses/LICENSE-2.0
@@ -26,7 +26,7 @@ public class ExcelSheet implements TableReader.Sheet {
 		this.index = index;
 		this.excelTableReader = excelTableReader;
 	}
-	
+
 	@Override
 	public int getIndex() {
 		return index;
@@ -36,7 +36,7 @@ public class ExcelSheet implements TableReader.Sheet {
 	public String getName() {
 		return getSheet().getSheetName();
 	}
-	
+
 	@Override
 	public Row getRow(int index) {
 		return new ExcelRow(getSheet().getRow(index), excelTableReader.rowValueConverter);
@@ -55,14 +55,14 @@ public class ExcelSheet implements TableReader.Sheet {
 			public int size() {
 				Sheet sheet = getSheet();
 				int i = sheet.getLastRowNum();
-				if(i == 0) {
+				if(i <= 0) {
 					return sheet.getPhysicalNumberOfRows() == 0 ? 0 : 1;
 				}
 				return i + 1;
 			}
 		};
 	}
-	
+
 	@Override
 	public Iterator<Row> iterator() {
 		return getRows().iterator();

@@ -8,7 +8,6 @@
  */
 package hu.webhejj.commons.io.table;
 
-import hu.webhejj.commons.io.table.CompareUtils;
 import hu.webhejj.commons.io.table.TableReader.Row;
 
 import java.util.AbstractList;
@@ -25,13 +24,13 @@ public abstract class AbstractTableRow implements TableReader.Row {
 	@Override
 	public <T> T getValue(String column, Class<T> valueType, T defaultValue) {
 		T value = getValue(column, valueType);
-		return CompareUtils.isEmpty(value) ? defaultValue : value;
+		return TableUtils.isEmpty(value) ? defaultValue : value;
 	}
 
 	@Override
 	public <T> T getValue(int column, Class<T> valueType, T defaultValue) {
 		T value = getValue(column, valueType);
-		return CompareUtils.isEmpty(value) ? defaultValue : value;
+		return TableUtils.isEmpty(value) ? defaultValue : value;
 	}
 
 	@Override

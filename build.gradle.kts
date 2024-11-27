@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "hu.webhejj"
-version = "0.1.0"
+version = "0.1.0-SNAPSHOT"
 description = "Webhejj Tables Java utility library"
 
 java {
@@ -29,8 +29,8 @@ repositories {
 }
 
 dependencies {
-    implementation("com.opencsv:opencsv:5.9")
-    implementation("org.apache.poi:poi-ooxml:5.3.0")
+    api("com.opencsv:opencsv:5.9")
+    api("org.apache.poi:poi-ooxml:5.3.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.3")

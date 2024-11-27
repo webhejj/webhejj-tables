@@ -12,6 +12,7 @@ package hu.webhejj.commons.io.table.excel;
 import java.io.*;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -20,13 +21,29 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class ExcelUtils {
 
-	public static void ensureSheet(Workbook workbook, int index) {
+	public static Sheet ensureSheet(Workbook workbook, int index) {
 		for(int i = workbook.getNumberOfSheets(); i <= index; i++) {
 			workbook.createSheet();
+		}
+		return workbook.getSheetAt(index);
+	}
+
+	public static Workbook openOrCreateWorkbook(File file) {
+		if(file.exists()) {
+			return openWorkbook(file);
+		} else if(file.toString().endsWith(".xlsx")) {
+			return new XSSFWorkbook();
+		} else if(file.toString().endsWith(".xls")){
+			return new HSSFWorkbook();
+		} else {
+			throw new IllegalArgumentException("File extension should be .xslx or .xls, got: " + file);
 		}
 	}
 
 	public static Workbook openWorkbook(File file) {
+		if(!file.exists()) {
+			throw new IllegalArgumentException("File does not exist: " + file);
+		}
 		try {
 			return openWorkbook(new FileInputStream(file));
 		} catch (IOException e) {

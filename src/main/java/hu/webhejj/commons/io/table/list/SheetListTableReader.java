@@ -8,7 +8,6 @@
  */
 package hu.webhejj.commons.io.table.list;
 
-import hu.webhejj.commons.io.table.CompareUtils;
 import hu.webhejj.commons.io.table.TableReader;
 
 import java.lang.Override;import java.lang.String;import java.util.Arrays;
