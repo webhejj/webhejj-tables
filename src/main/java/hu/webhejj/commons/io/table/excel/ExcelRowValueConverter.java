@@ -103,7 +103,7 @@ public class ExcelRowValueConverter {
 
 					// TODO: time zones?
                     if(DateUtil.isCellDateFormatted(cell)) {
-                        return (T) cell.getDateCellValue().toInstant().toString();
+                        return (T) cell.getLocalDateTimeCellValue().toString();
                     }
 
 					Format format = formatter.createFormat(cell);
