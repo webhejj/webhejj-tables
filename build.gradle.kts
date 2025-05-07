@@ -12,17 +12,19 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 plugins {
     `java-library`
     `maven-publish`
+    signing
     id("com.github.ben-manes.versions") version "0.51.0"
 }
 
 group = "hu.webhejj"
-version = "0.1.0-SNAPSHOT"
+version = "1.0.0"
 description = "Webhejj Tables Java utility library"
 
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
+    withJavadocJar()
     withSourcesJar()
 }
 
@@ -48,8 +50,47 @@ publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
+            pom {
+                packaging = "jar"
+                name.set("webhejj-tables")
+                description.set(project.description)
+                url.set("https://github.com/gnagy/webhejj-tables")
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("gnagy")
+                        name.set("Gergely Nagy")
+                        email.set("greg@webhejj.hu")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/gnagy/webhejj-tables.git")
+                    developerConnection.set("scm:git:ssh://github.com/gnagy/webhejj-tables.git")
+                    url.set("https://github.com/gnagy/webhejj-tables")
+                }
+            }
         }
     }
+
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = project.findProperty("ossrhUsername") as String?
+                password = project.findProperty("ossrhPassword") as String?
+            }
+        }
+    }
+}
+
+signing {
+    sign(publishing.publications["mavenJava"])
 }
 
 // https://github.com/ben-manes/gradle-versions-plugin

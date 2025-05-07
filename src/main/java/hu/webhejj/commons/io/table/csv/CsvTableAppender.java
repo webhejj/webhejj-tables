@@ -13,13 +13,6 @@ import hu.webhejj.commons.io.table.TableAppender;
 
 import java.io.*;
 
-/**
- *
- * TableAppender for comma separated format
- *
- * @author Gergely Nagy <greg@webhejj.hu>
- *
- */
 public class CsvTableAppender implements TableAppender, AutoCloseable {
 
 	private final Writer writer;

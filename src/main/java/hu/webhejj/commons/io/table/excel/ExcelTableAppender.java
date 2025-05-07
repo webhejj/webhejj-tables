@@ -16,13 +16,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/**
- *
- * TableAppender for Excel format
- *
- * @author Gergely Nagy <greg@webhejj.hu>
- *
- */
 public class ExcelTableAppender implements TableAppender {
 
 	private int rowIndex;
