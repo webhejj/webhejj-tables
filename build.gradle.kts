@@ -1,3 +1,5 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+
 /*
  *  Copyright Gergely Nagy <greg@webhejj.hu>
  *
@@ -29,11 +31,13 @@ repositories {
 }
 
 dependencies {
-    api("com.opencsv:opencsv:5.9")
-    api("org.apache.poi:poi-ooxml:5.3.0")
+    api("com.opencsv:opencsv:5.11")
+    api("org.apache.poi:poi-ooxml:5.4.1")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.3")
+    testImplementation(platform("org.junit:junit-bom:5.12.2"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.test {
@@ -45,5 +49,13 @@ publishing {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
         }
+    }
+}
+
+// https://github.com/ben-manes/gradle-versions-plugin
+tasks.withType<DependencyUpdatesTask> {
+    revision = "release"
+    rejectVersionIf {
+        setOf("-alpha", "-beta", "-rc", "-dev").any { candidate.version.lowercase().contains(it) }
     }
 }
